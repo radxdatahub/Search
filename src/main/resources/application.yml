@@ -1,0 +1,155 @@
+# DEFAULT
+# Spring Boot configuration
+spring:
+  profiles:
+    active: dev
+  mvc:
+    servlet:
+      path: /api/search/v1
+    log-request-details: false
+    log-resolved-exception: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: warn
+    radxdatahub.search:
+      RadxSearchApplication: info
+    org.springframework.web.servlet:
+      DispatcherServlet: trace
+      mvc.method.annotation:
+        HttpEntityMethodProcessor: trace
+
+management:
+  endpoint:
+    health:
+      show-details: never
+      enabled: true
+  health:
+    elasticsearch:
+      enabled: false
+  endpoints:
+    web:
+      exposure:
+        include: health
+    enabled-by-default: false
+
+opensearch:
+  hostname: ${opensearch.hostname}
+  port: ${opensearch.port}
+  scheme: ${opensearch.scheme}
+  username: ${opensearch.username}
+  password: ${opensearch.password}
+  index:
+    studies: study_search
+    autocomplete: study_autocomplete_v001
+
+query:
+  query-fields:
+    title: 2.0
+    description: 1.0
+    subject: 1.0
+    data_general_types: 1.0
+    dcc: 1.0
+    types: 1.0
+    source: 1.0
+    topics: 1.0
+    phs: 1.0
+    study_population_focus: 1.0
+    study_variables: 1.0
+  aggregation-fields:
+    - "dcc"
+    - "source_array"
+    - "title"
+    - "subject_array"
+    - "types_array"
+    - "topics_array"
+    - "institutes_supporting_study_array"
+    - "data_general_types_array"
+    - "has_data_files"
+    - "estimated_participant_range"
+    - "study_population_focus_array"
+    - "study_variables_array"
+  sorting-fields:
+    phs: phs.keyword
+    title: title.keyword
+    dcc: dcc.keyword
+    relevance: _score
+
+radx-apis:
+  host: ${HostURL}
+  entity-service:
+    getProps: /api/entity/v1/search/getProps
+
+---
+# LOCAL
+
+spring:
+  config:
+    activate:
+      on-profile: local
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+opensearch:
+  hostname: ${SEARCH_HOST}
+  port: 443
+  scheme: https
+  username: ${SEARCH_USERNAME}
+  password: ${SEARCH_PASSWORD}
+  index:
+    studies: study_search
+    autocomplete: study_autocomplete_v001
+
+logging:
+  pattern:
+    console: "[%boldMagenta(SEARCH)] [%boldGreen(LOCAL)] %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) --- [%cyan(%15.15t)] %-40.40logger{1.} %boldYellow(::) %m%n%wEx"
+
+---
+# DEV
+
+spring:
+  config:
+    import: aws-secretsmanager:application_dev
+    activate:
+      on-profile: dev
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  pattern:
+    console: "[%boldMagenta(SEARCH)] [%boldGreen(DEV)] %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) --- [%cyan(%15.15t)] %-40.40logger{1.} %boldYellow(::) %m%n%wEx"
+
+---
+# TEST
+
+spring:
+  config:
+    import: aws-secretsmanager:application_test
+    activate:
+      on-profile: test
+
+logging:
+  pattern:
+    console: "[%boldMagenta(SEARCH)] [%boldGreen(TEST)] %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) --- [%cyan(%15.15t)] %-40.40logger{1.} %boldYellow(::) %m%n%wEx"
+
+---
+# PROD
+
+spring:
+  config:
+    import: aws-secretsmanager:application_prod
+    activate:
+      on-profile: prod
+
+logging:
+  pattern:
+    console: "[%boldMagenta(SEARCH)] [%boldGreen(PROD)] %d{yyyy-MM-dd HH:mm:ss.SSS} %highlight([%5p]) --- [%cyan(%15.15t)] %-40.40logger{1.} %boldYellow(::) %m%n%wEx"
