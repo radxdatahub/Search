@@ -15,8 +15,8 @@ server:
 logging:
   level:
     root: warn
-    radxdatahub.search:
-      RadxSearchApplication: info
+    ex.org.project.search:
+      SearchApplication: info
     org.springframework.web.servlet:
       DispatcherServlet: trace
       mvc.method.annotation:
@@ -47,18 +47,47 @@ opensearch:
     autocomplete: study_autocomplete_v001
 
 query:
-  query-fields:
-    title: 2.0
-    description: 1.0
+  min-score-ratio: 0.2
+  exact-fields:
+    title: 1.5
+    description: 0.75
+    subject: 2.0
+    data_general_types: 2.0
+    dcc: 0.5
+    types: 2.0
+    source: 2.0
+    topics: 2.0
+    phs: 1.0
+    study_population_focus: 2.0
+    study_variables: 1.0
+    institutes_supporting_study: 0.5
+    study_DOI: 0.2
+    pi_name: 0.5
+    multi_center_sites: 1.0
+    grant_number: 1.0
+  fuzzy-fields:
+    title: 1.2
+    description: 0.6
+    subject: 1.6
+    data_general_types: 1.6
+    types: 1.6
+    source: 1.6
+    topics: 1.6
+    study_population_focus: 1.6
+    study_variables: 1.0
+    pi_name: 0.25
+    multi_center_sites: 0.8
+  partial-fields:
+    title: .75
+    description: 0.45
     subject: 1.0
     data_general_types: 1.0
-    dcc: 1.0
     types: 1.0
     source: 1.0
     topics: 1.0
-    phs: 1.0
     study_population_focus: 1.0
     study_variables: 1.0
+    multi_center_sites: 0.25
   aggregation-fields:
     - "dcc"
     - "source_array"
@@ -78,10 +107,17 @@ query:
     dcc: dcc.keyword
     relevance: _score
 
-radx-apis:
+apis:
   host: ${HostURL}
   entity-service:
     getProps: /api/entity/v1/search/getProps
+
+database:
+  db-user: ${dbuser}
+  db-password: ${password}
+  host: ${host}
+  port: ${port}
+  db-name: ${dbname}
 
 ---
 # LOCAL
@@ -97,7 +133,7 @@ management:
       show-details: always
 
 opensearch:
-  hostname: ${SEARCH_HOST}
+  hostname: search-os-dev-o3trnur44rfx5cdpepqrjqbsri.us-east-2.es.amazonaws.com
   port: 443
   scheme: https
   username: ${SEARCH_USERNAME}
