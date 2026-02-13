@@ -1,4 +1,4 @@
-FROM openjdk:22-ea-17-jdk-slim
+FROM amazoncorretto:17-alpine
 EXPOSE 8080
 
 ARG CERT
