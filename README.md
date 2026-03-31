@@ -1,6 +1,6 @@
-# RADx-Search
+# Search
 
-Spring Boot 3 microservice for RADx Data Hub 3.0. It is running on Java 17.
+Spring Boot 3 microservice for Data Hub 3.0. It is running on Java 17.
 
 # Install and Run
 
@@ -9,8 +9,6 @@ Spring Boot 3 microservice for RADx Data Hub 3.0. It is running on Java 17.
 ### Local
 
 There are a few environment variable that need to be set:
-* SEARCH_HOST
-  * Hostname of Opensearch cluster
 * SEARCH_USERNAME
   * Open Search username for basic auth
 * SEARCH_PASSWORD
@@ -18,7 +16,7 @@ There are a few environment variable that need to be set:
 * SPRING_PROFILES_ACTIVE
   * This should be set to 'local'
 * HostURL
-  * hostname of the radx data hub system
+  * hostname of the  data hub system
 
 I typically just set these via my environment variables in IntelliJ.
 
@@ -47,7 +45,7 @@ There are a few environment variable that need to be set in AWS Secrets Manager:
 * opensearch.password
     * Open Search password for basic auth
 * HostURL
-  * hostname of the radx data hub system
+  * hostname of the data hub system
 
 In a specific instance, the only environment variable that needs to be set is:
 * SPRING_PROFILES_ACTIVE
